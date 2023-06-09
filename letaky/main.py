@@ -52,7 +52,6 @@ def get_data(market_url, market_list):
         y = prise[index].getText().rstrip()
         if y:
             if " - " in y:
-                # print(y)
                 y = y.split(" - ")
                 y = y[0]
             y = y.strip()
@@ -84,8 +83,15 @@ def get_data(market_url, market_list):
         for index in range(8, len(articles) - 4):
 
             x = articles[index].find("h2")
+            link = ""
+            link2 = ""
 
             if x:
+                for linkx in x:
+                    link = linkx.get("href")
+                if articles[index-1].find("h2"):
+                    for linkx2 in articles[index-1].find("h2"):
+                        link2 = linkx2.get("href")
 
                 app_list = []
                 x = x.text.upper()
@@ -100,7 +106,7 @@ def get_data(market_url, market_list):
                     app_list.append(sale)
 
                 if len(articles_name) > 0:
-                    if x != articles_name[len(articles_name) - 1][0]:
+                    if  link != link2:
                         articles_name.append(app_list)
                 else:
                     articles_name.append(app_list)
@@ -109,7 +115,6 @@ def get_data(market_url, market_list):
             y = prise[index].getText().rstrip()
             if y:
                 if " - " in y:
-                    # print(y)
                     y = y.split(" - ")
                     y = y[0]
                 y = y.strip()
@@ -123,16 +128,12 @@ def get_data(market_url, market_list):
                     else:
                         articles_prise.append(float(last_prise))
 
-
     for index in range(len(articles_name)):
         one_list = []
         one_list.append(articles_name[index])
         one_list.append(articles_prise[index])
         market_list.append(one_list)
 #tkinter
-
-def klick():
-    print("klick")
 
 def start_find():
     result = user_input.get().upper()
@@ -174,7 +175,6 @@ def delete_article():
 #přidat položku z vyhledávaných
 def add_from_find():
     article_to_add = find_label.get(ANCHOR)
-    print(article_to_add)
     result_label.insert(END, article_to_add)
 
 #Vyčšistit vyhledávání
@@ -212,7 +212,7 @@ get_data(lidl_url, lidl_list)
 main_color = "#13678A"
 
 window = Tk()
-window.geometry("1200x800+100+40")
+window.geometry("1250x800+30+140")
 window.resizable(False, False)
 window.title("Přehled akcí Penny/Lidl")
 window.config(bg=main_color)
@@ -222,9 +222,6 @@ window2.geometry("600x400+0+0")
 window2.resizable(False, False)
 window2.title("Vybrané zboží")
 window2.config(bg=main_color)
-
-
-
 
 #fREmy
 
@@ -314,9 +311,6 @@ text_scrollbar.config(command=lidl_table.yview)
 #doplnění tabulky penny a lidl
 table_text(penny_list, penny_table)
 table_text(lidl_list, lidl_table)
-
-
-
 
 #Hlavní cyklus
 window.mainloop()
